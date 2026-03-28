@@ -3,305 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Performance Tracker</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>preformance-viewer</title>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #091f2e;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
-    .code-box {
-      background-color: #fefce8;
-      color: #333;
+    .hero {
+      perspective: 1000px;
+      margin-top: 10vh;
+      width: 90%;
+      max-width: 600px;
     }
-    .btn-active {
-      opacity: 1 !important;
-      transform: scale(1.05);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    .card {
+      background-color: #0d3a52;
+      padding: 40px;
+      border-radius: 8px;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-    .sh-keyword { color: #859900; }
-    .sh-func { color: #268bd2; }
-    .sh-num { color: #2aa198; }
+    .card h1 {
+      color: #58b8d4;
+      margin-top: 0;
+      transform: translateZ(50px);
+    }
+    .card p {
+      transform: translateZ(30px);
+      line-height: 1.5;
+    }
+    .tech {
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #58b8d4;
+      transform: translateZ(20px);
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #58b8d4;
+      color: #091f2e;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transform: translateZ(40px);
+    }
+    @media (max-width: 600px) {
+      .card { padding: 20px; }
+      .card h1 { font-size: 1.5em; }
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
-  <!-- Top Section -->
-  <div class="bg-[#f3f4f6] pt-8 pb-6 px-4 flex flex-col items-center border-b border-gray-200">
-    <div class="flex items-baseline gap-4 mb-6">
-      <h1 class="text-4xl font-normal text-gray-800">Performance Tracker</h1>
-      <p class="text-gray-600 text-lg">Choose a function and start plotting!</p>
-    </div>
-    
-    <div class="flex flex-wrap justify-center gap-2 mb-6">
-      <button id="btn-addUpToFirst" class="px-4 py-2 rounded text-white font-mono text-sm shadow transition-all opacity-80 hover:opacity-100" style="background-color: #3b82f6;">addUpToFirst</button>
-      <button id="btn-addUpToSecond" class="px-4 py-2 rounded text-white font-mono text-sm shadow transition-all opacity-80 hover:opacity-100" style="background-color: #6b7280;">addUpToSecond</button>
-      <button id="btn-countUpAndDown" class="px-4 py-2 rounded text-white font-mono text-sm shadow transition-all opacity-80 hover:opacity-100" style="background-color: #10b981;">countUpAndDown</button>
-      <button id="btn-printAllPairs" class="px-4 py-2 rounded text-white font-mono text-sm shadow transition-all opacity-80 hover:opacity-100" style="background-color: #ef4444;">printAllPairs</button>
-      <button id="btn-numberOfHalves" class="px-4 py-2 rounded text-white font-mono text-sm shadow transition-all opacity-80 hover:opacity-100" style="background-color: #f59e0b;">numberOfHalves</button>
-      <button id="btn-totalNumberOfHalves" class="px-4 py-2 rounded text-white font-mono text-sm shadow transition-all opacity-80 hover:opacity-100" style="background-color: #06b67f;">totalNumberOfHalves</button>
-      <button id="btn-logAllBinaries" class="px-4 py-2 rounded text-white font-mono text-sm shadow transition-all opacity-80 hover:opacity-100" style="background-color: #111827;">logAllBinaries</button>
-      <button id="btn-fibonacci" class="px-4 py-2 rounded text-white font-mono text-sm shadow transition-all opacity-80 hover:opacity-100" style="background-color: #8b5cf6;">fibonacci</button>
-    </div>
-
-    <div class="flex items-center gap-2">
-      <input type="number" id="max-n-input" value="1000000000" class="border border-gray-300 rounded px-3 py-1.5 w-48 text-gray-700 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-400">
-      <button id="plot-btn" class="bg-[#374151] hover:bg-gray-900 text-white px-4 py-1.5 rounded shadow transition-colors font-medium">Plot!</button>
-      <span id="status" class="text-sm text-blue-600 font-medium ml-2"></span>
+<body>
+  <div class="hero">
+    <div class="card" id="card">
+      <h1>preformance-viewer</h1>
+      <p>a frontend application solving state management and ui rendering complexities. it handles asynchronous data fetching and displays it in a responsive layout. the code focuses on component reusability and strict typing.</p>
+      <p class="tech">html, css, javascript, typescript, frontend frameworks</p>
+      <a href="https://github.com/ZiadtahaM/preformance-viewer" class="btn">View Source</a>
     </div>
   </div>
-
-  <!-- Bottom Section -->
-  <div class="flex-1 flex flex-col md:flex-row p-8 gap-8 max-w-7xl mx-auto w-full">
-    <!-- Left: Code Display -->
-    <div class="w-full md:w-1/3">
-      <pre id="code-display" class="code-box p-6 rounded shadow-sm overflow-x-auto text-sm font-mono min-h-[150px]"></pre>
-    </div>
-    
-    <!-- Right: Chart -->
-    <div class="w-full md:w-2/3 flex flex-col">
-      <div class="relative flex-1 w-full min-h-[400px]">
-        <canvas id="chart"></canvas>
-      </div>
-      <p class="text-center text-gray-500 text-xs italic mt-4">
-        <span class="font-sans">⌘</span> + click on a point to remove it; shift + click to remove all data for that function.
-      </p>
-    </div>
-  </div>
-
-
-
   <script>
-    const functionsData = {
-      addUpToFirst: {
-        color: '#3b82f6',
-        code: `function addUpToFirst(n) {\n  let total = 0;\n  for (let i = 1; i <= n; i++) {\n    total += i;\n  }\n  return total;\n}`,
-        fn: function addUpToFirst(n) {
-          let total = 0;
-          for (let i = 1; i <= n; i++) total += i;
-          return total;
-        },
-        maxN: 1000000000
-      },
-      addUpToSecond: {
-        color: '#6b7280',
-        code: `function addUpToSecond(n) {\n  return n * (n + 1) / 2;\n}`,
-        fn: function addUpToSecond(n) {
-          return n * (n + 1) / 2;
-        },
-        maxN: 1000000000
-      },
-      countUpAndDown: {
-        color: '#10b981',
-        code: `function countUpAndDown(n) {\n  for (let i = 0; i <= n; i++) {}\n  for (let i = n; i >= 0; i--) {}\n  return n;\n}`,
-        fn: function countUpAndDown(n) {
-          for (let i = 0; i <= n; i++) {}
-          for (let i = n; i >= 0; i--) {}
-          return n;
-        },
-        maxN: 500000000
-      },
-      printAllPairs: {
-        color: '#ef4444',
-        code: `function printAllPairs(n) {\n  for (let i = 0; i <= n; i++) {\n    for (let j = 0; j <= n; j++) {}\n  }\n  return n;\n}`,
-        fn: function printAllPairs(n) {
-          let sum = 0;
-          for (let i = 0; i < n; i++) {
-            for (let j = 0; j < n; j++) { sum++; }
-          }
-          return sum;
-        },
-        maxN: 30000
-      },
-      numberOfHalves: {
-        color: '#f59e0b',
-        code: `function numberOfHalves(n) {\n  let count = 0;\n  while (n > 1) {\n    n = Math.floor(n / 2);\n    count++;\n  }\n  return count;\n}`,
-        fn: function numberOfHalves(n) {
-          let count = 0;
-          while (n > 1) { n = Math.floor(n / 2); count++; }
-          return count;
-        },
-        maxN: 1000000000
-      },
-      totalNumberOfHalves: {
-        color: '#06b67f',
-        code: `function totalNumberOfHalves(n) {\n  let total = 0;\n  while (n > 1) {\n    n = Math.floor(n / 2);\n    total += n;\n  }\n  return total;\n}`,
-        fn: function totalNumberOfHalves(n) {
-          let total = 0;
-          while (n > 1) { n = Math.floor(n / 2); total += n; }
-          return total;
-        },
-        maxN: 1000000000
-      },
-      logAllBinaries: {
-        color: '#111827',
-        code: `function logAllBinaries(n) {\n  for (let i = 1; i <= n; i++) {\n    let binary = i.toString(2);\n  }\n  return n;\n}`,
-        fn: function logAllBinaries(n) {
-          for (let i = 1; i <= n; i++) { let b = i.toString(2); }
-          return n;
-        },
-        maxN: 10000000
-      },
-      fibonacci: {
-        color: '#8b5cf6',
-        code: `function fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}`,
-        fn: function fibonacci(n) {
-          const f = (m) => m <= 1 ? m : f(m - 1) + f(m - 2);
-          return f(n);
-        },
-        maxN: 42
-      }
-    };
-
-    let activeFunction = null;
-    let chartInstance = null;
-
-    function syntaxHighlight(code) {
-      let escaped = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      return escaped
-        .replace(/\b(\d+)\b/g, '<span class="sh-num">$1</span>')
-        .replace(/\b(function|return|let|for|while)\b/g, '<span class="sh-keyword">$1</span>')
-        .replace(/([a-zA-Z0-9_]+)(?=\()/g, '<span class="sh-func">$1</span>');
-    }
-
-    function initChart() {
-      const ctx = document.getElementById('chart').getContext('2d');
-      chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: { datasets: [] },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 400 },
-          scales: {
-            x: {
-              type: 'linear',
-              position: 'bottom',
-              title: { display: true, text: 'n', font: { style: 'italic', size: 16, weight: 'bold' } },
-              min: 0,
-              ticks: {
-                callback: function(value) {
-                  if (value === 0) return '0';
-                  if (value >= 1000000000) return (value / 1000000000).toFixed(1) + 'G';
-                  if (value >= 1000000) return (value / 1000000).toFixed(0) + 'M';
-                  if (value >= 1000) return (value / 1000).toFixed(0) + 'k';
-                  return value;
-                }
-              },
-              grid: { color: '#e5e7eb', borderColor: '#9ca3af', borderDash: [5, 5] }
-            },
-            y: {
-              type: 'linear',
-              title: { display: true, text: 'Time Elapsed (seconds)', font: { weight: 'bold', size: 14 } },
-              min: 0,
-              ticks: {
-                callback: function(value) {
-                  if (value === 0) return '0';
-                  if (value < 0.001) return (value * 1000000).toFixed(0) + 'μs';
-                  if (value < 1) return (value * 1000).toFixed(0) + 'ms';
-                  return value.toFixed(2) + 's';
-                }
-              },
-              grid: { color: '#e5e7eb', borderColor: '#9ca3af', borderDash: [5, 5] }
-            }
-          },
-          plugins: {
-            legend: { display: true, position: 'top' },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  return `n: ${context.parsed.x.toLocaleString()}, time: ${context.parsed.y.toFixed(6)}s`;
-                }
-              }
-            }
-          },
-          onClick: (e, elements, chart) => {
-            if (elements.length > 0) {
-              const datasetIndex = elements[0].datasetIndex;
-              if (e.native.shiftKey) {
-                chart.data.datasets.splice(datasetIndex, 1);
-              } else {
-                chart.data.datasets[datasetIndex].data.splice(elements[0].index, 1);
-              }
-              chart.update();
-            }
-          }
-        }
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      initChart();
-      const codeDisplay = document.getElementById('code-display');
-      const status = document.getElementById('status');
-      
-      Object.keys(functionsData).forEach(fnName => {
-        const btn = document.getElementById(`btn-${fnName}`);
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('button[id^="btn-"]').forEach(b => b.classList.remove('btn-active'));
-          btn.classList.add('btn-active');
-          activeFunction = fnName;
-          codeDisplay.innerHTML = syntaxHighlight(functionsData[fnName].code);
-        });
-      });
-
-      document.getElementById('plot-btn').addEventListener('click', async () => {
-        if (!activeFunction) { alert('Please select a function first!'); return; }
-        
-        const maxNInput = parseInt(document.getElementById('max-n-input').value, 10);
-        if (isNaN(maxNInput) || maxNInput <= 0) return;
-        
-        const fnData = functionsData[activeFunction];
-        const limit = Math.min(maxNInput, fnData.maxN);
-        
-        // Dynamic scaling based on the new limit if it's larger than current max
-        if (!chartInstance.options.scales.x.max || limit > chartInstance.options.scales.x.max) {
-          chartInstance.options.scales.x.max = limit;
-        }
-
-        const newDataset = {
-          label: activeFunction,
-          data: [{ x: 0, y: 0 }],
-          borderColor: fnData.color,
-          backgroundColor: fnData.color,
-          borderWidth: 2,
-          pointRadius: 5,
-          fill: false,
-          tension: 0.1
-        };
-        chartInstance.data.datasets.push(newDataset);
-        chartInstance.update();
-
-        const samples = [];
-        for (let i = 1; i <= 12; i++) samples.push(Math.floor((i / 12) * limit));
-        const uniqueSamples = [...new Set(samples)].sort((a, b) => a - b);
-
-        for (const n of uniqueSamples) {
-          if (n === 0) continue;
-          status.innerText = `Plotting ${activeFunction}... n=${n.toLocaleString()}`;
-          
-          await new Promise(r => setTimeout(r, 10));
-
-          let totalTime = 0;
-          const runs = n < 100 ? 500 : 3;
-          
-          for (let i = 0; i < runs; i++) {
-            const start = performance.now();
-            fnData.fn(n);
-            const end = performance.now();
-            totalTime += (end - start);
-          }
-          
-          const avgTimeSec = (totalTime / runs) / 1000;
-          newDataset.data.push({ x: n, y: avgTimeSec });
-          chartInstance.update();
-        }
-        
-        status.innerText = 'Done!';
-        setTimeout(() => { status.innerText = ''; }, 2000);
-      });
+    const card = document.getElementById('card');
+    document.addEventListener('mousemove', (e) => {
+      const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+      const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+      card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
     });
   </script>
 </body>
