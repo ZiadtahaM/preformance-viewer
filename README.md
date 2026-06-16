@@ -28,8 +28,6 @@ Performance Viewer is a high-fidelity diagnostic interface built with a focus on
 1. Clone the repository.
 2. Open index.html in a browser to begin benchmarking.
 
-Live Demo: https://ziadtaham.github.io/preformance-viewer/
-
 ---
 
 Quality-focused performance diagnostics for reliable software systems.
